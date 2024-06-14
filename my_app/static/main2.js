@@ -16,8 +16,10 @@ for (var i = ul.children.length; i >= 0; i--) {
   ul.appendChild(ul.children[(Math.random() * i) | 0]);
 }
 
-//Initializer - Play First Song
-initAudio($("#playlist li:first-child"));
+// Ensure the document is fully loaded before initializing the audio
+$(document).ready(function () {
+  initAudio($("#playlist li:first-child"));
+});
 
 function initAudio(element) {
   var song = element.attr("song_url");
@@ -47,6 +49,12 @@ function initAudio(element) {
     $(".progress-bar").css("width", 0 + "%");
     $("#next").trigger("click");
   });
+
+  // Play the audio automatically
+  audio.play();
+  $("#play").hide();
+  $("#pause").show();
+  showDuration();
 }
 
 //Play Button
@@ -133,7 +141,7 @@ $("#volume").change(function () {
 //Time Duration
 function showDuration() {
   $(audio).bind("timeupdate", function () {
-    //Get hours and minutes
+    //Get minutes and seconds
     var s = parseInt(audio.currentTime % 60);
     var m = parseInt((audio.currentTime / 60) % 60);
     //Add 0 if seconds less than 10
